@@ -16,6 +16,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import MoreIcon from "@material-ui/icons/MoreVert";
 
 import Map from '../Components/Map';
 
@@ -46,7 +50,7 @@ const useStyles = makeStyles(theme => ({
     display: 'none',
   },
   drawer: {
-    width:240,
+    width: 240,
     flexShrink: 0,
   },
   drawerPaper: {
@@ -75,12 +79,85 @@ const useStyles = makeStyles(theme => ({
     }),
     marginLeft: 0,
   },
+
+  grow: {
+    flexGrow: 1
+  },
+  menuButton: {
+    marginRight: theme.spacing(2)
+  },
+
 }));
 
 const LeftDrawer = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
+  const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  function handleProfileMenuOpen(event) {
+    setAnchorEl(event.currentTarget);
+  }
+
+  function handleMobileMenuClose() {
+    setMobileMoreAnchorEl(null);
+  }
+
+  function handleMenuClose() {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  }
+
+  function handleMobileMenuOpen(event) {
+    setMobileMoreAnchorEl(event.currentTarget);
+  }
+
+  const menuId = 'primary-search-account-menu';
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+    </Menu>
+  );
+
+  const mobileMenuId = 'primary-search-account-menu-mobile';
+  const renderMobileMenu = (
+    <Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={mobileMenuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    >
+
+      <MenuItem onClick={handleProfileMenuOpen}>
+        <IconButton
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <AccountCircle />
+        </IconButton>
+        <p>Profile</p>
+      </MenuItem>
+    </Menu>
+  );
 
   function handleDrawerOpen() {
     setOpen(true);
@@ -100,6 +177,7 @@ const LeftDrawer = () => {
         })}
       >
         <Toolbar>
+
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -109,8 +187,34 @@ const LeftDrawer = () => {
           >
             <MenuIcon />
           </IconButton>
+          <div className={classes.grow} />
+          <div className={classes.sectionDesktop}>
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+          </div>
+          <div className={classes.sectionMobile}>
+            <IconButton
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MoreIcon />
+            </IconButton>
+          </div>
         </Toolbar>
       </AppBar>
+      {renderMobileMenu}
+      {renderMenu}
       <Drawer
         className={classes.drawer.flexShrink}
         variant="persistent"

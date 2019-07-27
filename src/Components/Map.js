@@ -27,7 +27,7 @@ class MapContainer extends Component {
                 lat: place.latitude,
                 lng: place.longitude
             }}
-                onClick={() => console.log("You clicked me!")} />
+                onClick={() => console.log("clicked me!")} />
         })
     }
 
