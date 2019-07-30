@@ -12,14 +12,12 @@ class MapContainer extends Component {
         super(props);
 
         this.state = {
-            places: [
-                { latitude: 7.8731, longitude: 79.7718 },
-                { latitude: 6.053519, longitude: 80.220978 },
-                { latitude: 7.8731, longitude: 80.7718 },
-            ]
+            places: [],
         }
     }
-
+   /*  { latitude: 7.8731, longitude: 79.7718 },
+    { latitude: 6.053519, longitude: 80.220978 },
+    { latitude: 7.8731, longitude: 80.7718 }, */
     displayPlaces = () => {
         return this.state.places.map((place, index) => {
             return <Marker key={index} id={index} position={{
@@ -28,6 +26,16 @@ class MapContainer extends Component {
             }}
                 onClick={() => alert("clicked me!")} />
         })
+    }
+
+    componentDidMount(){
+        fetch('https://qualonsavy.herokuapp.com/api/trackers/getAll')
+        .then(res => res.json())
+        .then(json => {
+            this.setState({
+                places: json,
+            })
+        });
     }
 
     render() {
@@ -45,5 +53,7 @@ class MapContainer extends Component {
 }
 
 export default GoogleApiWrapper({
-    apiKey: 'AIzaSyCHj4VxLtNyma73bLVGpb5XUfV82jUifdQ'
+    apiKey: 'AIzaSyC2_OjDEi-KqIOPdBodS-Fm99GSQ0vTtA4'
 })(MapContainer);
+
+//AIzaSyCHj4VxLtNyma73bLVGpb5XUfV82jUifdQ  my one
