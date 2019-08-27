@@ -1,0 +1,78 @@
+import React, { Component } from 'react';
+import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+//import Websocket from 'react-websocket';
+
+
+const mapStyles = {
+    width: '100%',
+    height: '100%',
+};
+
+class MapContainer extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            places: [{ latitude: 7.8731, longitude: 79.7718 },
+                { latitude: 6.053519, longitude: 80.220978 },
+                { latitude: 7.8731, longitude: 80.7718 }],
+        }
+    }
+    /*{ latitude: 7.8731, longitude: 79.7718 },
+     { latitude: 6.053519, longitude: 80.220978 },
+     { latitude: 7.8731, longitude: 80.7718 }, */
+    displayPlaces = () => {
+        console.log(this.state.places);
+        return this.state.places.map((place, index) => {
+            return <Marker key={index} id={index} position={{
+                lat: place.latitude,
+                lng: place.longitude
+            }}
+                onClick={() => alert("clicked me!")} />
+        })
+    }
+    /* handleData(data) {
+        let result = JSON.parse(data);
+        console.log(result);
+        this.setState({
+            places: result,
+            //count: this.state.count + result.movement
+        });
+    } */
+
+    /* componentDidMount() {
+        fetch('https://qualonsavy.herokuapp.com/api/trackers/getAll')
+            .then(res => res.json())
+            .then(json => {
+                this.setState({
+                    places: json,
+                })
+            });
+    } */
+
+    render() {
+        return (
+            <div>
+                {/* <Websocket url='ws://demos.kaazing.com/echo' // ws://qualonsavy.herokuapp.com/api/trackers/getAll
+                    onMessage={this.handleData.bind(this)}
+                /> */}
+                <Map
+                    google={this.props.google}
+                    zoom={8}
+                    style={mapStyles}
+                    initialCenter={{ lat: 7.8731, lng: 80.7718 }}
+                >
+                    {this.displayPlaces()}
+                </Map>
+            </div>
+
+        );
+    }
+}
+
+export default GoogleApiWrapper({
+    apiKey: 'AIzaSyA63LvAPje4E-ftTpMNGh4Al6ySp1e27xc'
+})(MapContainer);
+
+//AIzaSyC2_OjDEi-KqIOPdBodS-Fm99GSQ0vTtA4  my one
