@@ -7,7 +7,7 @@ import * as ROUTES from '../../Constants/Routes';
 
 const SignOutButton = ({ firebase }) => (
     <Link to={ROUTES.LOGIN}>
-        <Button color="yellow" onClick={firebase.doSignOut}>
+        <Button  onClick={firebase.doSignOut}>
             Logout
         </Button>
     </Link >

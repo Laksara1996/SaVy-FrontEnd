@@ -167,7 +167,7 @@ class PersistentDrawerLeft extends React.Component {
               SaVy
             </Typography>
             <Link to={ROUTES.PROFILE}>
-              <Button color="yellow">
+              <Button>
                 Profile
             </Button>
             </Link>
