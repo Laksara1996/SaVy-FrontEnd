@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
+import { db } from '../Firebase/Init';
 
 const SignUpPage = () => (
     <div>
@@ -43,11 +44,12 @@ const submit = {
 }
 
 const INITIAL_STATE = {
-    fistname: '',
+    firstname: '',
     lastname: '',
     email: '',
     password: '',
     error: null,
+    uid: ''
 };
 
 class SignUpFormBase extends Component {
@@ -62,6 +64,21 @@ class SignUpFormBase extends Component {
         const { email, password } = this.state;
         this.props.firebase
             .doCreateUserWithEmailAndPassword(email, password)
+            .then((res) => {
+
+                this.setState({
+                    uid: res.user.uid
+                })
+                console.log(this.state.uid);
+                db.collection("Bus-Owners")
+                    .doc(this.state.uid)
+                    .set({
+                        firstname: this.state.firstname,
+                        lastname: this.state.lastname,
+                        email: this.state.email,
+
+                    })
+            })
             .then(authUser => {
                 this.setState({ ...INITIAL_STATE });
                 this.props.history.push(ROUTES.HOME);

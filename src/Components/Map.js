@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 //import Websocket from 'react-websocket';
 import BusImage from '../Assests/Bus.png';
+import { db } from '../Components/Firebase/Init';
 
 const mapStyles = {
     width: '100%',
@@ -14,11 +15,9 @@ class MapContainer extends Component {
         super(props);
 
         this.state = {
-            places: [
-                
-            ],
-            Markerlat: "Bus",
-            Markerlng: "",
+            places: [],
+            latestPlaces: [],
+            count: 0
         }
     }
 
@@ -27,22 +26,22 @@ class MapContainer extends Component {
      { latitude: 7.8731, longitude: 80.7718 }, */
 
     onMarkerClick = (props, marker, e, lat, lng) => {
-        console.log(this.state.Markerlat);
+        //console.log(this.state.Markerlat);
         this.setState({
             activeMarker: marker,
             showingInfoWindow: true
         });
     }
-
     displayPlaces = () => {
-        console.log(this.state.places);
+
         return this.state.places.map((place, index) => {
+            { console.log(place) }
             return <Marker
                 key={index}
                 id={index}
                 position={{
-                    lat: place.latitude,
-                    lng: place.longitude
+                    lat: place.gps._lat,
+                    lng: place.gps._long
                 }}
                 icon={BusImage}
                 onClick={this.onMarkerClick} />
@@ -58,8 +57,8 @@ class MapContainer extends Component {
             //count: this.state.count + result.movement
         });
     } */
-    
-     componentDidMount() {
+
+    /*componentDidMount() {
         fetch('http://qualonsavy.herokuapp.com/api/tracker/getLiveData/Tr0')
             .then(res => res.json())
             .then(json => {
@@ -67,7 +66,22 @@ class MapContainer extends Component {
                     places: json,
                 })
             });
-    } 
+    } */
+
+    componentDidMount() {
+        db.collection("GPSDummy")
+            .onSnapshot((data) => {
+                let maped = data.docs.map(doc => {
+                    //console.log(doc.data());
+                    return { ...doc.data(), id: doc.data().trackerID };
+                })
+                this.setState({
+                    places: [...maped],
+                    //latestPlaces: [...maped]
+                });
+                //console.log(this.state.places);
+            })
+    }
 
     render() {
         return (
@@ -97,7 +111,7 @@ class MapContainer extends Component {
 }
 
 export default GoogleApiWrapper({
-    apiKey: 'AIzaSyA63LvAPje4E-ftTpMNGh4Al6ySp1e27xc'
+    apiKey: 'AIzaSyAQ4Tc3rcGjJt9Q6T-qdF3-CBxrof_xhT8'
 })(MapContainer);
 
 //AIzaSyCHj4VxLtNyma73bLVGpb5XUfV82jUifdQ  my one

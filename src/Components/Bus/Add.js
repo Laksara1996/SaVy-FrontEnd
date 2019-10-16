@@ -23,7 +23,6 @@ import {
 import { Paper } from '@material-ui/core';
 import TopNavigation from '../../Layout/Layout';
 
-import axios from 'axios';
 
 const styles = theme => ({
     root: {
@@ -61,11 +60,6 @@ class AddBus extends Component {
         ],
         data: []
     }
-
-    componentDidMount(){
-        axios.post
-    }
-
 
     render() {
         return (
